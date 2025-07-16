@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Classification | AI-Powered Medical Diagnosis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617'
+                        },
+                        wave: {
+                            50: '#ffffff',
+                            100: '#f8fafc',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b'
+                        },
+                        accent: {
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-950 min-h-screen font-inter text-white relative overflow-x-hidden">
+    <!-- Video Background -->
+    <div class="video-background">
+        <video id="background-video" autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='videos/videobackground.mp4') }}" type="video/mp4">
+            <!-- Fallback for browsers that don't support video -->
+            <div class="video-fallback"></div>
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <!-- Header with Personal Info -->
+    <header class="bg-dark-900/70 backdrop-blur-md shadow-lg border-b border-dark-700/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-wave-50/90 to-wave-200/90 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                        <i class="fas fa-brain text-dark-900 text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-wave-50 drop-shadow-lg">Brain Tumor Classifier</h1>
+                        <p class="text-sm text-wave-300 drop-shadow-md">AI-Powered Medical Diagnosis</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="mailto:devp63081@gmail.com" class="text-wave-300 hover:text-wave-50 transition-colors drop-shadow-lg">
+                        <i class="fas fa-envelope text-lg"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/dev-delvadiya-5160a7265" target="_blank" class="text-wave-300 hover:text-wave-50 transition-colors drop-shadow-lg">
+                        <i class="fab fa-linkedin text-lg"></i>
+                    </a>
+                    <a href="https://github.com/Devpatel1012" target="_blank" class="text-wave-300 hover:text-wave-50 transition-colors drop-shadow-lg">
+                        <i class="fab fa-github text-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="mb-8">
+                <div class="inline-flex items-center px-4 py-2 bg-dark-800/60 backdrop-blur-sm text-wave-200 rounded-full text-sm font-medium mb-6 border border-dark-600/50 drop-shadow-lg">
+                    <i class="fas fa-stethoscope mr-2"></i>
+                    Advanced AI Medical Imaging
+                </div>
+                <h1 class="text-5xl md:text-6xl font-bold text-wave-50 mb-6 leading-tight drop-shadow-2xl">
+                    Brain Tumor
+                    <span class="bg-gradient-to-r from-wave-50 to-accent-400 bg-clip-text text-transparent drop-shadow-lg">
+                        Classification
+                    </span>
+                </h1>
+                <p class="text-xl text-wave-200 max-w-3xl mx-auto leading-relaxed drop-shadow-lg">
+                    Upload MRI brain scans for instant AI-powered analysis. Our deep learning model can classify four types of brain conditions with high accuracy using transfer learning techniques.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Classification Interface -->
+    <section class="py-12 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-dark-900/80 backdrop-blur-md rounded-2xl shadow-2xl border border-dark-700/50 overflow-hidden">
+                <!-- Upload Section -->
+                <div class="p-8 bg-gradient-to-r from-dark-800/60 to-dark-700/60 backdrop-blur-sm">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 bg-gradient-to-r from-wave-50/90 to-wave-200/90 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+                            <i class="fas fa-upload text-dark-900 text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-wave-50 mb-2 drop-shadow-lg">Upload MRI Scan</h2>
+                        <p class="text-wave-300 drop-shadow-md">Select a brain MRI image for classification analysis</p>
+                    </div>
+
+                    <form id="upload-form" enctype="multipart/form-data" class="space-y-6">
+                        <div class="relative">
+                            <input type="file" id="image-upload" name="file" accept="image/*" class="hidden">
+                            <label for="image-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-dark-600/70 rounded-xl cursor-pointer bg-dark-800/40 hover:bg-dark-700/40 transition-all duration-300 group backdrop-blur-sm">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="fas fa-cloud-upload-alt text-3xl text-wave-300 group-hover:text-wave-50 mb-2 drop-shadow-lg"></i>
+                                    <p class="text-sm text-wave-300 group-hover:text-wave-50 drop-shadow-md">
+                                        <span class="font-semibold">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p class="text-xs text-wave-400 drop-shadow-sm">PNG, JPG, JPEG (MAX. 10MB)</p>
+                                </div>
+                            </label>
+                            <div id="file-name" class="mt-2 text-sm text-wave-300 hidden drop-shadow-md"></div>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-wave-50/90 to-wave-200/90 hover:from-wave-100/90 hover:to-wave-300/90 text-dark-900 font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center space-x-2 backdrop-blur-sm">
+                            <i class="fas fa-microscope"></i>
+                            <span>Analyze Brain Scan</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loading-indicator" class="p-8 text-center hidden">
+                    <div class="flex flex-col items-center space-y-4">
+                        <div class="relative">
+                            <div class="w-16 h-16 border-4 border-dark-600/50 border-t-wave-50 rounded-full animate-spin"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-brain text-wave-50 text-lg drop-shadow-lg"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-lg font-semibold text-wave-50 drop-shadow-lg">Analyzing Brain Scan...</p>
+                            <p class="text-wave-300 drop-shadow-md">Our AI model is processing your image</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results" class="hidden">
+                    <div class="p-8 border-t border-dark-700/50">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <!-- Image Display -->
+                            <div class="space-y-4">
+                                <h3 class="text-lg font-semibold text-wave-50 flex items-center drop-shadow-lg">
+                                    <i class="fas fa-image mr-2 text-accent-400"></i>
+                                    Uploaded Scan
+                                </h3>
+                                <div class="relative group">
+                                    <img id="uploaded-image" src="/placeholder.svg" alt="Uploaded Brain Scan" class="w-full h-auto rounded-xl shadow-lg border border-dark-600/50 transition-transform duration-300 group-hover:scale-105" style="display: none;">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900/40 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </div>
+                            </div>
+
+                            <!-- Prediction Results -->
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-wave-50 mb-4 flex items-center drop-shadow-lg">
+                                        <i class="fas fa-chart-line mr-2 text-accent-400"></i>
+                                        Classification Results
+                                    </h3>
+                                    
+                                    <!-- Main Prediction -->
+                                    <div class="bg-gradient-to-r from-dark-800/60 to-dark-700/60 backdrop-blur-sm rounded-xl p-6 mb-6 border border-dark-600/50">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-medium text-wave-300 drop-shadow-md">Primary Diagnosis</span>
+                                            <i class="fas fa-check-circle text-accent-400 drop-shadow-lg"></i>
+                                        </div>
+                                        <p id="prediction-text" class="text-2xl font-bold text-wave-50 mb-1 drop-shadow-lg"></p>
+                                        <p id="confidence-text" class="text-lg text-accent-400 font-semibold drop-shadow-md"></p>
+                                    </div>
+
+                                    <!-- All Probabilities -->
+                                    <div class="bg-dark-800/40 backdrop-blur-sm rounded-xl p-6 border border-dark-600/50">
+                                        <h4 class="text-md font-semibold text-wave-50 mb-4 flex items-center drop-shadow-lg">
+                                            <i class="fas fa-percentage mr-2 text-wave-300"></i>
+                                            Detailed Probabilities
+                                        </h4>
+                                        <div id="all-probs" class="space-y-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-message" class="p-6 bg-red-900/50 backdrop-blur-sm border-t border-red-800/50 text-red-300 font-medium hidden flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Information Section -->
+    <section class="py-16 px-4 bg-dark-900/70 backdrop-blur-md relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-wave-50 mb-4 drop-shadow-lg">How Our AI Model Works</h2>
+                <p class="text-lg text-wave-200 max-w-3xl mx-auto drop-shadow-md">
+                    Understanding the technology behind brain tumor classification using deep learning and transfer learning techniques.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <!-- Block 1: Transfer Learning -->
+                <div class="text-center p-6 rounded-xl bg-dark-800/60 backdrop-blur-sm border border-dark-600/50 cursor-pointer hover:shadow-lg hover:border-wave-400/50 transition-all duration-300 group" onclick="openModal('transfer-learning')">
+                    <div class="w-16 h-16 bg-gradient-to-r from-wave-50/90 to-wave-200/90 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                        <i class="fas fa-network-wired text-dark-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-wave-50 mb-3 drop-shadow-lg">Transfer Learning: Smart Adaptation</h3>
+                    <p class="text-wave-300 mb-4 drop-shadow-md">
+                        Our AI model doesn't start from scratch. It leverages a powerful neural network that has already learned to recognize millions of patterns from a vast collection of general images.
+                    </p>
+                    <div class="text-accent-400 font-medium flex items-center justify-center group-hover:text-wave-50 transition-colors drop-shadow-md">
+                        <span>Learn More</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- Block 2: Image Processing -->
+                <div class="text-center p-6 rounded-xl bg-dark-800/60 backdrop-blur-sm border border-dark-600/50 cursor-pointer hover:shadow-lg hover:border-wave-400/50 transition-all duration-300 group" onclick="openModal('image-processing')">
+                    <div class="w-16 h-16 bg-gradient-to-r from-wave-50/90 to-wave-200/90 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                        <i class="fas fa-eye text-dark-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-wave-50 mb-3 drop-shadow-lg">Image Processing: Preparing for Precision</h3>
+                    <p class="text-wave-300 mb-4 drop-shadow-md">
+                        For the AI to accurately analyze an MRI scan, the image needs careful preparation. This involves standardizing its size and normalizing pixel values.
+                    </p>
+                    <div class="text-accent-400 font-medium flex items-center justify-center group-hover:text-wave-50 transition-colors drop-shadow-md">
+                        <span>Learn More</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- Block 3: Multi-Class Detection -->
+                <div class="text-center p-6 rounded-xl bg-dark-800/60 backdrop-blur-sm border border-dark-600/50 cursor-pointer hover:shadow-lg hover:border-wave-400/50 transition-all duration-300 group" onclick="openModal('multi-class')">
+                    <div class="w-16 h-16 bg-gradient-to-r from-wave-50/90 to-wave-200/90 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                        <i class="fas fa-brain text-dark-900 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-wave-50 mb-3 drop-shadow-lg">Multi-Class Detection: Detailed Insights</h3>
+                    <p class="text-wave-300 mb-4 drop-shadow-md">
+                        Our system performs multi-class classification, distinguishing between four specific brain conditions and providing probability scores.
+                    </p>
+                    <div class="text-accent-400 font-medium flex items-center justify-center group-hover:text-wave-50 transition-colors drop-shadow-md">
+                        <span>Learn More</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Article Link -->
+            <div class="bg-gradient-to-r from-dark-800/70 to-dark-700/70 backdrop-blur-sm rounded-2xl p-8 text-center border border-dark-600/50">
+                <div class="max-w-3xl mx-auto">
+                    <h3 class="text-2xl font-bold mb-4 text-wave-50 drop-shadow-lg">Learn More About Transfer Learning for Image Classification</h3>
+                    <p class="text-wave-200 mb-6 text-lg drop-shadow-md">
+                        Dive deeper into the technical details and implementation of transfer learning for image classification with my comprehensive guide.
+                    </p>
+                    <a href="https://dev.to/dev_patel_35864ca1db6093c/unlocking-accuracy-using-transfer-learning-with-fine-tuning-for-image-classification-2nho" target="_blank" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-wave-50/90 to-wave-200/90 text-dark-900 font-semibold rounded-xl hover:from-wave-100/90 hover:to-wave-300/90 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm">
+                        <i class="fas fa-external-link-alt mr-2"></i>
+                        Read the Complete Guide
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for Detailed Information -->
+    <div id="modal-overlay" class="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div id="modal-content" class="bg-dark-900/90 backdrop-blur-md rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 border border-dark-700/50">
+                <!-- Modal content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-950/80 backdrop-blur-md text-wave-200 py-12 px-4 relative border-t border-dark-800/50">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="flex justify-center items-center space-x-6 mb-6">
+                <a href="mailto:devp63081@gmail.com" class="text-wave-400 hover:text-wave-50 transition-colors drop-shadow-lg">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+                <a href="https://linkedin.com/in/dev-delvadiya-5160a7265" target="_blank" class="text-wave-400 hover:text-wave-50 transition-colors drop-shadow-lg">
+                    <i class="fab fa-linkedin text-xl"></i>
+                </a>
+                <a href="https://github.com/Devpatel1012" target="_blank" class="text-wave-400 hover:text-wave-50 transition-colors drop-shadow-lg">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+            <p class="text-wave-400 drop-shadow-md">
+                © 2024 Brain Tumor Classification System. Built with Flask, TensorFlow, and modern web technologies.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Video Controls (Optional) -->
+    <div class="fixed bottom-4 right-4 z-40">
+        <button id="video-toggle" class="bg-dark-800/80 backdrop-blur-sm text-wave-50 p-3 rounded-full hover:bg-dark-700/80 transition-colors border border-dark-600/50" title="Toggle Video">
+            <i class="fas fa-pause text-sm"></i>
+        </button>
+    </div>
+
+    <script>
+        // Video control functionality
+        const video = document.getElementById('background-video');
+        const videoToggle = document.getElementById('video-toggle');
+        const toggleIcon = videoToggle.querySelector('i');
+
+        videoToggle.addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+                toggleIcon.className = 'fas fa-pause text-sm';
+                videoToggle.title = 'Pause Video';
+            } else {
+                video.pause();
+                toggleIcon.className = 'fas fa-play text-sm';
+                videoToggle.title = 'Play Video';
+            }
+        });
+
+        // Ensure video plays on load
+        video.addEventListener('loadeddata', function() {
+            video.play().catch(function(error) {
+                console.log('Video autoplay failed:', error);
+            });
+        });
+
+        // Modal functionality
+        const modalData = {
+            'transfer-learning': {
+                title: 'Transfer Learning: Smart Adaptation',
+                icon: 'fas fa-network-wired',
+                content: `
+                    <p class="text-wave-200 mb-6 text-lg">
+                        Our AI model doesn't start from scratch. It leverages a powerful neural network that has already learned to recognize millions of patterns from a vast collection of general images. This pre-trained knowledge is then adapted and fine-tuned for the specific task of classifying brain MRI scans.
+                    </p>
+                    <h4 class="text-xl font-semibold text-wave-50 mb-4">How it Works:</h4>
+                    <ul class="text-wave-200 space-y-3 mb-6 list-disc list-inside">
+                        <li><strong class="text-wave-50">Foundation Building:</strong> The model first learns general visual features (like edges, textures, shapes) from a massive dataset (e.g., ImageNet).</li>
+                        <li><strong class="text-wave-50">Knowledge Transfer:</strong> We take this "expert" network and attach new, smaller layers specifically for our task.</li>
+                        <li><strong class="text-wave-50">Fine-Tuning:</strong> The entire network, or just the new layers, is then trained on our specialized brain MRI dataset. This allows it to adapt its general knowledge to medical imaging, learning subtle, disease-specific features.</li>
+                        <li><strong class="text-wave-50">Efficiency Boost:</strong> This approach drastically reduces the need for a huge medical dataset and significantly cuts down training time, while still achieving high accuracy.</li>
+                    </ul>
+                    <h4 class="text-xl font-semibold text-wave-50 mb-4">Learn More:</h4>
+                    <ul class="text-wave-200 space-y-2">
+                        <li><a href="https://www.tensorflow.org/tutorials/images/transfer_learning" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">TensorFlow Tutorial on Transfer Learning</a></li>
+                        <li><a href="https://towardsdatascience.com/a-comprehensive-guide-to-transfer-learning-in-deep-learning-b12e3663a7f" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">Towards Data Science: Transfer Learning Guide</a></li>
+                        <li><a href="https://www.ibm.com/cloud/learn/transfer-learning" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">IBM Cloud: What is Transfer Learning?</a></li>
+                    </ul>
+                `
+            },
+            'image-processing': {
+                title: 'Image Processing: Preparing for Precision',
+                icon: 'fas fa-eye',
+                content: `
+                    <p class="text-wave-200 mb-6 text-lg">
+                        For the AI to accurately analyze an MRI scan, the image needs careful preparation. This involves standardizing its size and normalizing pixel values to a specific range, ensuring the model receives consistent and optimal input.
+                    </p>
+                    <h4 class="text-xl font-semibold text-wave-50 mb-4">How it Works:</h4>
+                    <ul class="text-wave-200 space-y-3 mb-6 list-disc list-inside">
+                        <li><strong class="text-wave-50">Resizing:</strong> All uploaded images are automatically resized to a uniform dimension (e.g., 224x224 pixels) to match the model's input requirements.</li>
+                        <li><strong class="text-wave-50">Normalization:</strong> Pixel values are transformed to a consistent scale. For models like VGG16, this often involves specific mean subtraction and scaling, making the image data compatible with how the pre-trained network expects its input.</li>
+                        <li><strong class="text-wave-50">Data Augmentation (during training):</strong> During the model's learning phase, we artificially create variations of existing images (e.g., slight rotations, flips, zooms). This expands the training dataset and makes the model more robust and less sensitive to minor differences in image orientation or quality in real-world scans.</li>
+                    </ul>
+                    <h4 class="text-xl font-semibold text-wave-50 mb-4">Learn More:</h4>
+                    <ul class="text-wave-200 space-y-2">
+                        <li><a href="https://www.geeksforgeeks.org/image-preprocessing-in-machine-learning/" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">GeeksforGeeks: Image Preprocessing</a></li>
+                        <li><a href="https://www.tensorflow.org/tutorials/images/data_augmentation" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">TensorFlow Guide on Data Augmentation</a></li>
+                        <li><a href="https://www.analyticsvidhya.com/blog/2021/05/a-comprehensive-guide-to-image-preprocessing-for-deep-learning/" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">Analytics Vidhya: Image Preprocessing for Deep Learning</a></li>
+                    </ul>
+                `
+            },
+            'multi-class': {
+                title: 'Multi-Class Detection: Detailed Insights',
+                icon: 'fas fa-brain',
+                content: `
+                    <p class="text-wave-200 mb-6 text-lg">
+                        Our system performs multi-class classification, distinguishing between four specific brain conditions and providing a probability score for each category, indicating the AI's confidence.
+                    </p>
+                    <h4 class="text-xl font-semibold text-wave-50 mb-4">How it Works:</h4>
+                    <ul class="text-wave-200 space-y-3 mb-6 list-disc list-inside">
+                        <li><strong class="text-wave-50">Categorization:</strong> The model is trained to classify MRI brain scans into one of four distinct categories: <strong class="text-wave-50">Glioma</strong>, <strong class="text-wave-50">Meningioma</strong>, <strong class="text-wave-50">Pituitary tumor</strong>, and the absence of a tumor (<strong class="text-wave-50">No tumor</strong>).</li>
+                        <li><strong class="text-wave-50">Probability Output:</strong> For each uploaded scan, the AI generates a set of probabilities, one for each category. These probabilities sum up to 100%.</li>
+                        <li><strong class="text-wave-50">Confident Prediction:</strong> The category with the highest probability is presented as the primary diagnosis, along with its confidence level.</li>
+                        <li><strong class="text-wave-50">Comprehensive View:</strong> You also see the probabilities for all other categories, offering a complete picture of the AI's assessment based on the visual patterns it identifies in the scan.</li>
+                    </ul>
+                    <h4 class="text-xl font-semibold text-wave-50 mb-4">Learn More:</h4>
+                    <ul class="text-wave-200 space-y-2">
+                        <li><a href="https://www.ibm.com/cloud/learn/image-classification" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">IBM Cloud: What is Image Classification?</a></li>
+                        <li><a href="https://machinelearningmastery.com/multi-class-classification-tutorial-for-deep-learning/" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">Machine Learning Mastery: Multi-Class Classification</a></li>
+                        <li><a href="https://www.datacamp.com/blog/multi-class-classification-deep-learning" target="_blank" class="text-accent-400 hover:text-wave-50 hover:underline">DataCamp: Multi-Class Classification in Deep Learning</a></li>
+                    </ul>
+                `
+            }
+        };
+
+        function openModal(type) {
+            const modal = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            const data = modalData[type];
+            
+            content.innerHTML = `
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-wave-50/90 to-wave-200/90 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                <i class="${data.icon} text-dark-900 text-lg"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-wave-50">${data.title}</h2>
+                        </div>
+                        <button onclick="closeModal()" class="text-wave-400 hover:text-wave-50 text-2xl">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="prose max-w-none">
+                        ${data.content}
+                    </div>
+                    <div class="mt-8 flex justify-center">
+                        <button onclick="closeModal()" class="bg-gradient-to-r from-wave-50/90 to-wave-200/90 text-dark-900 px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 backdrop-blur-sm">
+                            <i class="fas fa-check mr-2"></i>
+                            Done
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // File upload preview
+        document.getElementById('image-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const fileName = document.getElementById('file-name');
+            
+            if (file) {
+                fileName.textContent = `Selected: ${file.name}`;
+                fileName.classList.remove('hidden');
+            } else {
+                fileName.classList.add('hidden');
+            }
+        });
+
+        // Form submission
+        document.getElementById('upload-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('image-upload');
+            const file = fileInput.files[0];
+
+            const resultsDiv = document.getElementById('results');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const errorMessage = document.getElementById('error-message');
+
+            // Clear previous results and errors
+            resultsDiv.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            errorMessage.querySelector('span').textContent = '';
+            document.getElementById('uploaded-image').style.display = 'none';
+
+            if (!file) {
+                errorMessage.querySelector('span').textContent = "Please select an image file.";
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Show loading indicator
+            loadingIndicator.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                // Hide loading indicator
+                loadingIndicator.classList.add('hidden');
+
+                if (data.error) {
+                    errorMessage.querySelector('span').textContent = `Error: ${data.error}`;
+                    errorMessage.classList.remove('hidden');
+                } else {
+                    // Show results
+                    resultsDiv.classList.remove('hidden');
+
+                    const uploadedImage = document.getElementById('uploaded-image');
+                    const predictionText = document.getElementById('prediction-text');
+                    const confidenceText = document.getElementById('confidence-text');
+                    const allProbsDiv = document.getElementById('all-probs');
+
+                    uploadedImage.src = data.image_url;
+                    uploadedImage.style.display = 'block';
+                    predictionText.textContent = data.prediction.charAt(0).toUpperCase() + data.prediction.slice(1);
+                    confidenceText.textContent = `Confidence: ${data.confidence}`;
+
+                    // Create probability bars
+                    allProbsDiv.innerHTML = '';
+                    const sortedProbs = Object.entries(data.all_probabilities).sort((a, b) => b[1] - a[1]);
+                    
+                    sortedProbs.forEach(([className, probability]) => {
+                        const percentage = (probability * 100).toFixed(2);
+                        const isHighest = className === data.prediction;
+                        
+                        const probDiv = document.createElement('div');
+                        probDiv.className = 'flex items-center justify-between p-3 rounded-lg border backdrop-blur-sm ' + 
+                                          (isHighest ? 'bg-dark-700/60 border-accent-400/50' : 'bg-dark-800/40 border-dark-600/50');
+                        
+                        probDiv.innerHTML = `
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 rounded-full ${isHighest ? 'bg-accent-400' : 'bg-wave-400'}"></div>
+                                <span class="font-medium text-wave-50 capitalize">${className}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-20 h-2 bg-dark-600/50 rounded-full overflow-hidden">
+                                    <div class="h-full ${isHighest ? 'bg-accent-400' : 'bg-wave-400'} rounded-full transition-all duration-500" 
+                                         style="width: ${percentage}%"></div>
+                                </div>
+                                <span class="text-sm font-semibold text-wave-200 min-w-[3rem]">${percentage}%</span>
+                            </div>
+                        `;
+                        
+                        allProbsDiv.appendChild(probDiv);
+                    });
+
+                    // Scroll to results
+                    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } catch (error) {
+                loadingIndicator.classList.add('hidden');
+                errorMessage.querySelector('span').textContent = `Network error: ${error.message}`;
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

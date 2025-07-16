@@ -1,0 +1,459 @@
+/* Video Background Theme - Brain Tumor Classification App */
+
+/* Import Inter font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #020617;
+  color: #f8fafc;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* Video Background Styles */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translateX(-50%) translateY(-50%);
+  object-fit: cover;
+}
+
+/* Video overlay for better text readability */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(2, 6, 23, 0.7) 0%,
+    rgba(15, 23, 42, 0.6) 25%,
+    rgba(30, 41, 59, 0.5) 50%,
+    rgba(15, 23, 42, 0.6) 75%,
+    rgba(2, 6, 23, 0.8) 100%
+  );
+  z-index: -1;
+}
+
+/* Fallback background for when video doesn't load */
+.video-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='100' viewBox='0 0 200 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 Q50 20 100 50 T200 50 V100 H0 Z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  animation: wave-flow 20s linear infinite;
+}
+
+@keyframes wave-flow {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: 200px;
+  }
+}
+
+/* Enhanced text shadows for better readability over video */
+.drop-shadow-sm {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+.drop-shadow-md {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.8));
+}
+
+.drop-shadow-lg {
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.8));
+}
+
+.drop-shadow-xl {
+  filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.8));
+}
+
+.drop-shadow-2xl {
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.9));
+}
+
+/* Custom scrollbar for video theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.6);
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.8);
+}
+
+/* Enhanced glassmorphism effects */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+}
+
+.backdrop-blur-lg {
+  backdrop-filter: blur(16px);
+}
+
+/* Enhanced image hover effects */
+#uploaded-image {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+#uploaded-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes shimmer-video {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer-video {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer-video 2s infinite;
+}
+
+/* Enhanced button styles for video theme */
+.btn-video-primary {
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(226, 232, 240, 0.9) 100%);
+  color: #0f172a;
+  box-shadow: 0 4px 15px 0 rgba(248, 250, 252, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-video-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn-video-primary:hover::before {
+  left: 100%;
+}
+
+.btn-video-primary:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.95) 100%);
+  box-shadow: 0 8px 25px 0 rgba(248, 250, 252, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Loading spinner enhancement for video theme */
+.loading-spinner-video {
+  position: relative;
+}
+
+.loading-spinner-video::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid transparent;
+  border-top: 2px solid rgba(248, 250, 252, 0.8);
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Modal styles for video theme */
+#modal-overlay {
+  backdrop-filter: blur(15px);
+  background: rgba(2, 6, 23, 0.85);
+}
+
+#modal-content {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* Enhanced card hover effects for video theme */
+.card-hover-video {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.card-hover-video:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  border-color: rgba(248, 250, 252, 0.4);
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(15px);
+}
+
+/* Video control button */
+#video-toggle {
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+#video-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive video adjustments */
+@media (max-width: 768px) {
+  .video-background video {
+    /* Ensure video covers mobile screens properly */
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .card-padding {
+    padding: 1.5rem;
+  }
+
+  #modal-content {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+
+  /* Adjust video overlay for mobile */
+  .video-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(2, 6, 23, 0.8) 0%,
+      rgba(15, 23, 42, 0.7) 25%,
+      rgba(30, 41, 59, 0.6) 50%,
+      rgba(15, 23, 42, 0.7) 75%,
+      rgba(2, 6, 23, 0.85) 100%
+    );
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .video-background video {
+    min-width: 100%;
+    min-height: 100%;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1920px) {
+  .video-background video {
+    min-width: 100%;
+    min-height: 100%;
+  }
+}
+
+/* Accessibility improvements for video theme */
+.focus-visible:focus {
+  outline: 2px solid rgba(96, 165, 250, 0.8);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2);
+}
+
+/* Print styles */
+@media print {
+  .no-print,
+  .video-background,
+  #video-toggle {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .video-overlay {
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+
+  .text-wave-300 {
+    color: #e2e8f0 !important;
+  }
+
+  .border-dark-600 {
+    border-color: #64748b !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .video-background video {
+    animation: none !important;
+  }
+
+  .video-fallback {
+    animation: none !important;
+  }
+}
+
+/* Custom selection colors for video theme */
+::selection {
+  background-color: rgba(59, 130, 246, 0.4);
+  color: #f8fafc;
+}
+
+::-moz-selection {
+  background-color: rgba(59, 130, 246, 0.4);
+  color: #f8fafc;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Performance optimizations */
+.video-background,
+.video-background video {
+  will-change: transform;
+}
+
+/* Ensure proper layering */
+.video-background {
+  z-index: -2;
+}
+
+.video-overlay {
+  z-index: -1;
+}
+
+/* Content should be above video */
+header,
+main,
+section,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Additional backdrop blur utilities */
+.backdrop-blur-xs {
+  backdrop-filter: blur(2px);
+}
+
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+.backdrop-blur-2xl {
+  backdrop-filter: blur(40px);
+}
+
+.backdrop-blur-3xl {
+  backdrop-filter: blur(64px);
+}
